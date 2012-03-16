@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}
+SMS Messages
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="sms span14">
+    <div class="page-header">
+      <h2>SMS Message Log</h2>
+    </div>
+    
+    <div class="pull-right">
+      <form method="POST" class="uniForm">
+          {{ search_form.search }}
+          <input type="hidden" name="action" value="search"/>
+          {% csrf_token %}
+        <input class="btn primary" type="submit" value="Search"/>
+      </form>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th></th>
+          <th>Number</th>
+          <th>Message</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for message in sms_messages.object_list %}
+      <tr>
+        <td valign="top" width="20" style="text-align: center">{% if message.direction == 'I' %}
+          <img src="{{ STATIC_URL }}img/in.png">
+          {% else %}
+          <img src="{{ STATIC_URL }}img/out.png">
+          {% endif %}
+        </td>
+        <td valign="top" class="clickable" width="80">{{ message.connection.identity }}</td>
+        <td>{{ message.text }}</td>
+        <td valign="top" nowrap="true">{{ message.date }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+{% with sms_messages.paginator as paginator %}
+{% block paginator %}
+<div class="row">
+  <div class="span7">
+    <div class="pagination-text">
+    {% if not paginator or paginator.num_pages <= 1 %}
+    {{ object_list|length }} result{% if object_list|length == 0 or object_list|length > 1 %}s{% endif %}
+    {% else %}
+    Results {{ sms_messages.start_index }}-{{ sms_messages.end_index }} of {{ paginator.count }}
+    {% endif %}
+    </div>
+  </div>
+  <div class="span7">
+    {% if paginator and paginator.num_pages > 1 %}
+    <div class="pagination pull-right">
+      <ul>
+        {% if sms_messages.has_previous %}
+        <li class="prev"><a href="console?{{url_params|safe}}page={{sms_messages.previous_page_number}}">&larr; Previous</a></li>
+        {% else %}
+        <li class="prev disabled"><a href="#">&larr; Previous</a></li>
+        {% endif %}
+
+        {% for page_num in paginator.page_range %}
+          {% if page_num < 10 %}
+            {% if not page_num == sms_messages.number %}
+            <li><a href="console?{{url_params|safe}}page={{page_num}}">{{ page_num }}</a></li>
+            {% else %}
+            <li class="active"><a href="#">{{ page_num }}</a></li>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {% if sms_messages.has_next %}
+        <li class="next"><a href="console?{{url_params|safe}}page={{sms_messages.next_page_number}}">Next &rarr;</a></li>
+        {% else %}
+        <li class="next disabled"><a href="#">Next &rarr;</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+{% endwith %}
+
+  </div>
+</div>
+
+<div class="row">  
+  <br/><br/>
+
+  <div class="tester module span14">
+    <div class="page-header">
+      <h2>Message Tester</h2>
+    </div>
+    <div>
+      <div class="alert-message block-message">
+        You can test the functionality of the system by pretending to be a user here.  Enter the phone number you want to simulate and the message you want to send into the system.  The reply will appear above in the message log.
+      </div>
+      <form method="POST" class="uniForm">
+        <div class="clearfix form-field">
+          <label>Sender: </label><div class="input">{{ form.sender }}</div>
+        </div>
+        <div class="clearfix form-field">
+          <label>Message: </label><div class="input">{{ form.text }}</div>
+        </div>
+        <input type="hidden" name="action" value="test" />
+
+        <div class="actions">
+          <input class="btn primary" type="submit" value="Test" />
+        </div>
+        {% csrf_token %}
+      </form>
+    </div>
+  </div>
+  <br/>
+</div>
+
+{% endblock %}

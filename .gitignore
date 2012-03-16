@@ -1,0 +1,15 @@
+*.*~
+*.db
+*.pyc
+#*#
+.DS_Store
+env
+\#*
+\.#*
+maternity/settings.py
+.coverage
+coverage
+coverage-report
+media
+smartmin
+
