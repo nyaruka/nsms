@@ -182,6 +182,9 @@ INSTALLED_APPS = (
 
     # translation of messages
     'text',
+
+    # our sample app
+    'mileage',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -310,7 +313,7 @@ SOUTH_TESTS_MIGRATE = False
 #-----------------------------------------------------------------------------------
 
 RAPIDSMS_TABS = []
-SMS_APPS = []
+SMS_APPS = [ 'mileage' ]
 
 # change this to your specific backend for your install
 DEFAULT_BACKEND = "console"

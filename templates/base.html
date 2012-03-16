@@ -34,6 +34,14 @@
       <div class="container">
         <a class="brand" href="/">RapidSMS</a>
         <ul class="nav">
+          {% if perms.mileage.car_list %}
+          <li><a href="{% url mileage.car_list %}">Cars</a></li>
+          {% endif %}
+
+          {% if perms.mileage.mileagereport_list %}
+          <li><a href="{% url mileage.mileagereport_list %}">Mileage Reports</a></li>
+          {% endif %}
+
           {% if perms.rapidsms_httprouter.message_list %}
           <li><a href="/router/console">Console</a></li>
           {% endif %}

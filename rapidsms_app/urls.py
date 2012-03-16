@@ -8,5 +8,7 @@ urlpatterns = patterns('',
     url('^router/console', login_required(console, 'rapidsms_httprouter.message_list')),
     url('', include('dashboard.urls')),
     url('', include('rapidsms_httprouter.urls')),
+
+    url('^mileage/', include('mileage.urls'))
 )
 
