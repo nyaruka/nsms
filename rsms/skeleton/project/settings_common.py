@@ -4,7 +4,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Nyaruka', 'code@nyaruka.com'),
+    ('Ops', 'ops@ourcompany.com'),
 )
 
 MANAGERS = ADMINS
@@ -22,8 +22,8 @@ DATABASES = {
 
 # set the mail settings, we send throught gmail
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'server@nyaruka.com'
-DEFAULT_FROM_EMAIL = 'server@nyaruka.com'
+EMAIL_HOST_USER = 'server@ourcompany.com'
+DEFAULT_FROM_EMAIL = 'server@ourcompany.com'
 EMAIL_HOST_PASSWORD = 'NOTREAL'
 EMAIL_USE_TLS = True
 

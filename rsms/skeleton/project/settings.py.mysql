@@ -5,9 +5,9 @@ DEBUG = True
 TEMPLATE_DEBUG = True
 
 # these guys will get email from sentry
-ADMINS = (
-   ('Nyaruka Ops', 'ops@nyaruka.com'),
-)
+# ADMINS = (
+#   ('Ops', 'ops@ourcompany.com'),
+# )
 
 MANAGERS = ADMINS
 
@@ -27,9 +27,9 @@ STATICFILES_FINDERS = (
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'maternity',
-        'USER': 'maternity',
-        'PASSWORD': 'nyaruka',
+        'NAME': 'mileage',
+        'USER': 'mileage',
+        'PASSWORD': 'mileage_password',
         'HOST': 'localhost',
         'PORT': '', 
         'OPTIONS': {
