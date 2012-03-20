@@ -1,5 +1,4 @@
 from django.test import TestCase
-from ..tests import MaternityTest
 from django.core.urlresolvers import reverse
 
 class DashboardTest(TestCase):
