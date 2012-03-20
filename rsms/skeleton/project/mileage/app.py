@@ -95,7 +95,7 @@ class App(AppBase):
         # look up whether this connection has a car
         car = Car.for_connection(message.connection)
         if not car:
-            _('miles-no-car', "You are not registered to be using a car, send: car [license plate] to register")
+            return _('miles-no-car', "You are not registered to be using a car, send: car [license plate] to register")
 
         # add mileage
         car.add_mileage(miles, message.connection)
