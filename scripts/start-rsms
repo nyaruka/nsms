@@ -1,0 +1,64 @@
+#!/usr/bin/python
+
+import os, getopt, sys, shutil
+import fileinput
+from os import path
+import rsms
+import traceback
+
+if len(sys.argv) != 2:
+    print "Usage: start-rsms <project-name>"
+
+# the name of our project
+name = sys.argv[1]
+
+# assert the directories don't already exist
+for dir_name in (name, 'templates', 'static'):
+    if path.exists(name):
+        print "Error: directory '%s' already exists" % name
+        sys.exit(1)
+
+# root of our rsms install
+rsms_dir = path.dirname(rsms.__file__)
+
+skeleton_project = path.join(rsms_dir, 'skeleton', 'project')
+skeleton_templates = path.join(rsms_dir, 'skeleton', 'templates')
+skeleton_static = path.join(rsms_dir, 'skeleton', 'static')
+
+print ""
+print "Creating %s project.." % name
+
+# skeleton directory is in there
+print " ** Copying project files"
+shutil.copytree(skeleton_project, name)
+
+print " ** Copying template files"
+shutil.copytree(skeleton_templates, 'templates')
+
+print " ** Copying static files"
+shutil.copytree(skeleton_static, 'static')
+
+# symlink settings.py to settings.py.dev
+print " ** Simlinking settings"
+dev_settings = path.join('settings.py.dev')
+settings_py = path.join(name, 'settings.py')
+
+try:
+    os.symlink(dev_settings, settings_py)
+except:
+    traceback.print_exc()
+    print "Unable to create symlink from settings.py.dev to settings.py, skipping"
+
+# set our project name in our settings_common.py
+print " ** Configuring Project"
+for i, line in enumerate(fileinput.input(path.join(name, 'settings_common.py'), inplace=1)):
+    sys.stdout.write(line.replace('!!PROJECT_NAME!!', name))
+
+print "Done."
+print ""
+print "Quickstart:"
+print " %% cd %s" % name
+print " % python manage.py syncdb"
+print " % python manage.py migrate"
+print " % python manage.py runserver"
+

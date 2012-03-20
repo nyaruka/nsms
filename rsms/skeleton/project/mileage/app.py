@@ -1,8 +1,8 @@
 from rapidsms.apps.base import AppBase
 from .models import *
-from text.models import gettext as _
+from rsms.text.models import gettext as _
+from rsms.parser import Parser, ParseException
 from rapidsms.models import Backend, Connection
-from rapidsms_parser.parser import Parser, ParseException
 from django.utils import translation
 from rapidsms_httprouter.router import get_router
 from django.template import Template, Context

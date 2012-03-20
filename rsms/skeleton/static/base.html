@@ -46,12 +46,12 @@
           <li><a href="/router/console">Console</a></li>
           {% endif %}
 
-          {% if perms.text.text_list %}
+          {% if perms.rsms.text_list %}
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle">Configuration</a>
             <ul class="dropdown-menu">
-              {% if perms.text.text_list %}
-              <li><a href="{% url text.text_list %}">Translations</a></li>
+              {% if perms.rsms.text_list %}
+              <li><a href="{% url rsms.text_list %}">Translations</a></li>
               {% endif %}
               {% if perms.auth.user_list %}
               <li><a href="/users/user/">Users</a></li>
@@ -104,7 +104,7 @@
 
   <footer>
     {% block footer %}
-    <a href="http://www.nyaruka.com/"><div class="right" id="footer"></div></a>
+    <a href="http://www.nyaruka.com/"><div class="pull-right" id="footer"><img src="{{ STATIC_URL }}img/nyaruka.png" /></div></a>
     {% endblock %}
   </footer>
   

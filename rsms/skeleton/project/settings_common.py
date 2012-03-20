@@ -12,7 +12,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'maternity.db',                      # Or path to database file if using sqlite3.
+        'NAME': '!!PROJECT_NAME!!.db',                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -124,7 +124,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware'
 )
 
-ROOT_URLCONF = 'rapidsms_app.urls'
+ROOT_URLCONF = '!!PROJECT_NAME!!.urls'
 
 CACHES = {
     'default': {
@@ -181,7 +181,7 @@ INSTALLED_APPS = (
     'smartmin.users',
 
     # translation of messages
-    'text',
+    'rsms.text',
 
     # our sample app
     'mileage',
@@ -326,13 +326,6 @@ DEFAULT_COUNTRY_CODE = "250"
 #-----------------------------------------------------------------------------------
 
 INTERNAL_IPS = ('127.0.0.1',)
-
-#-----------------------------------------------------------------------------------
-# Maternity App Configuration
-#-----------------------------------------------------------------------------------
-
-MAX_REGISTRATIONS = 388
-DATE_FORMAT = "Y-M-d"
 
 #-----------------------------------------------------------------------------------
 # Crontab Settings

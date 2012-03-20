@@ -52,7 +52,9 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
 )
 
-ROUTER_WORKERS = 1
-
 # set this to something secure
 ROUTER_PASSWORD = 'password'
+
+ROUTER_URL = None
+ROUTER_WORKERS = 1
+

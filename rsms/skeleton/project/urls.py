@@ -4,11 +4,10 @@ from rapidsms_httprouter.views import console
 
 urlpatterns = patterns('',
     url(r'^users/', include('smartmin.users.urls')),
-    url(r'^text/', include('text.urls')),
+    url(r'^text/', include('rsms.text.urls')),
     url('^router/console', login_required(console, 'rapidsms_httprouter.message_list')),
     url('', include('dashboard.urls')),
     url('', include('rapidsms_httprouter.urls')),
-
     url('^mileage/', include('mileage.urls'))
 )
 
