@@ -28,6 +28,10 @@ skeleton_static = path.join(rsms_dir, 'skeleton', 'static')
 print ""
 print "Creating %s project.." % name
 
+# copy our pip-requires
+print " ** Copying pip-requires.txt"
+shutil.copy(path.join(rsms_dir, 'skeleton', 'pip-requires.txt'), '.')
+
 # skeleton directory is in there
 print " ** Copying project files"
 shutil.copytree(skeleton_project, name)
@@ -57,6 +61,7 @@ for i, line in enumerate(fileinput.input(path.join(name, 'settings_common.py'), 
 print "Done."
 print ""
 print "Quickstart:"
+print " % pip install -r pip-requires.txt"
 print " %% cd %s" % name
 print " % python manage.py syncdb"
 print " % python manage.py migrate"

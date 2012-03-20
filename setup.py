@@ -6,7 +6,6 @@ setup(
     license="BSD",
 
     install_requires = [
-        "rapidsms==0.9.6a",
     ],
 
     description="Provides base RapidSMS implementation using Nyaruka's best practices.",
