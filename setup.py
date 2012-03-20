@@ -8,7 +8,7 @@ setup(
     install_requires = [
     ],
 
-    description="Provides base RapidSMS implementation using Nyaruka's best practices.",
+    description="Provides a skeleton RapidSMS project using Nyaruka's best practices.",
     long_description=open('README.rst').read(),
 
     author='Nicolas Pottier',

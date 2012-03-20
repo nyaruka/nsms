@@ -1,7 +1,7 @@
 Base Package / Module for RapidSMS Apps
 ----------------------------------------
 
-This package aims to provide a quick start for a basic RapidSMS setup using the tools Nyaruka uses to build its systems.  This includes setting up rapidsms, rapidsms-httprouter, smartmin and our parsing and localization libraries.  
+RSMS package aims to provide a quick start for a basic RapidSMS setup using the tools Nyaruka uses to build its systems.  This includes setting up rapidsms, rapidsms-httprouter, smartmin and our parsing and localization libraries.  
 
 Getting Started
 ----------------
