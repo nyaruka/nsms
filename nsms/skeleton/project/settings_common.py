@@ -181,7 +181,7 @@ INSTALLED_APPS = (
     'smartmin.users',
 
     # translation of messages
-    'rsms.text',
+    'nsms.text',
 
     # our sample app
     'mileage',

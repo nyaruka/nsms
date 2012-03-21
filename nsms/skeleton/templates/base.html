@@ -1,7 +1,7 @@
 <!doctype html>
 <head>
   <meta charset="utf-8">
-  <title>{% block title %}RapidSMS{% endblock %}</title>
+  <title>{% block title %}NyarukaSMS{% endblock %}</title>
   <meta name="description" content="">
   <meta name="author" content="">
 
@@ -32,7 +32,7 @@
   <div class="topbar">
     <div class="fill">
       <div class="container">
-        <a class="brand" href="/">RapidSMS</a>
+        <a class="brand" href="/">NyarukaSMS</a>
         <ul class="nav">
           {% if perms.mileage.car_list %}
           <li><a href="{% url mileage.car_list %}">Cars</a></li>
@@ -46,12 +46,12 @@
           <li><a href="/router/console">Console</a></li>
           {% endif %}
 
-          {% if perms.rsms.text_list %}
+          {% if perms.nsms.text_list %}
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle">Configuration</a>
             <ul class="dropdown-menu">
-              {% if perms.rsms.text_list %}
-              <li><a href="{% url rsms.text_list %}">Translations</a></li>
+              {% if perms.nsms.text_list %}
+              <li><a href="{% url nsms.text_list %}">Translations</a></li>
               {% endif %}
               {% if perms.auth.user_list %}
               <li><a href="/users/user/">Users</a></li>

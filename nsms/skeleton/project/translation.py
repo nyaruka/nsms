@@ -1,6 +1,6 @@
 from modeltranslation.translator import translator, TranslationOptions
 
-from rsms.text.models import *
+from nsms.text.models import *
 from django.utils.translation import ugettext as _
 from django.utils.translation import get_language as _get_language
 from modeltranslation import utils

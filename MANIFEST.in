@@ -1,2 +1,2 @@
 include README.rst
-recursive-include rsms *
+recursive-include nsms *

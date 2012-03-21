@@ -3,11 +3,11 @@
 import os, getopt, sys, shutil
 import fileinput
 from os import path
-import rsms
+import nsms
 import traceback
 
 if len(sys.argv) != 2:
-    print "Usage: start-rsms <project-name>"
+    print "Usage: start-nsms <project-name>"
 
 # the name of our project
 name = sys.argv[1]
@@ -18,19 +18,19 @@ for dir_name in (name, 'templates', 'static'):
         print "Error: directory '%s' already exists" % name
         sys.exit(1)
 
-# root of our rsms install
-rsms_dir = path.dirname(rsms.__file__)
+# root of our nsms install
+nsms_dir = path.dirname(nsms.__file__)
 
-skeleton_project = path.join(rsms_dir, 'skeleton', 'project')
-skeleton_templates = path.join(rsms_dir, 'skeleton', 'templates')
-skeleton_static = path.join(rsms_dir, 'skeleton', 'static')
+skeleton_project = path.join(nsms_dir, 'skeleton', 'project')
+skeleton_templates = path.join(nsms_dir, 'skeleton', 'templates')
+skeleton_static = path.join(nsms_dir, 'skeleton', 'static')
 
 print ""
 print "Creating %s project.." % name
 
 # copy our pip-requires
 print " ** Copying pip-requires.txt"
-shutil.copy(path.join(rsms_dir, 'skeleton', 'pip-requires.txt'), '.')
+shutil.copy(path.join(nsms_dir, 'skeleton', 'pip-requires.txt'), '.')
 
 # skeleton directory is in there
 print " ** Copying project files"

@@ -1,17 +1,17 @@
-Base Package / Module for RapidSMS Apps
+NyarukaSMS
 ----------------------------------------
 
-RSMS package aims to provide a quick start for a basic RapidSMS setup using the tools Nyaruka uses to build its systems.  This includes setting up rapidsms, rapidsms-httprouter, smartmin and our parsing and localization libraries.  
+NyarumaSMS aims to provide a quick start for a basic python based SMS app using the tools Nyaruka uses to build its systems.  This includes setting up rapidsms, rapidsms-httprouter, smartmin and our parsing and localization libraries.  
 
 Getting Started
 ----------------
 
-To get started, follow these setps:
+To get started, follow these steps::
 
   % virtualenv env
-  % ./env/bin/activate
-  % pip install rsms
-  % start-rsms [project-name]
+  % source env/bin/activate
+  % pip install nsms
+  % start-nsms [project-name]
   % pip install -r pip-requires.txt
   % cd [project-name]
   % python manage.py syncdb
@@ -21,10 +21,12 @@ To get started, follow these setps:
 Sample Application
 -------------------
 
-RSMS comes with a simple SMS application to track the mileage on vehicles.  The SMS format for the application is as follows.
+NSMS comes with a simple SMS application to track the mileage on vehicles.  The SMS format for the application is as follows.
 
 Registering Cars
 ~~~~~~~~~~~~~~~~
+
+Each user of the system much register the car they are using, they do so by sending::
 
   car [license plate]
 
@@ -32,6 +34,8 @@ This register a car to the phone.  From now on all mileage reports will be assoc
 
 Adding Mileage Reports
 ~~~~~~~~~~~~~~~~~~~~~~~
+
+Once a user has registered their car, they can report mileage by sending the message::
 
   miles [mileage (integer)]
 
