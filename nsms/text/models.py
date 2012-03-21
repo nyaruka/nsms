@@ -25,5 +25,5 @@ def gettext(slug, default_string, variables=None):
 class Text(SmartModel):
     slug = models.SlugField(unique=True,
                             help_text="The unique word used to identify this piece of text")
-    text = models.CharField(max_length=160, 
+    text = models.CharField(max_length=200, 
                             help_text="The text that will be displayed to the user for this language")

@@ -1,0 +1,16 @@
+{% extends "smartmin/list.html" %}
+
+{% block pre-content %}
+<div class="page-header"><h2>Translations</h2></div>
+Translations provide a way for your to modify the various messages the system might send back to users.  You can provide translations in the supported languages, making sure to follow the same format as the original text.  Any change you make will immediately take effect.
+{% endblock %}
+
+
+{% block extra-style %}
+  {{ block.super }}
+<style>
+  table tbody tr td:first-child {
+      width: 150px;
+  }
+</style>
+{% endblock %}

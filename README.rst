@@ -9,7 +9,7 @@ Getting Started
 To get started, follow these steps::
 
   % virtualenv env
-  % ./env/bin/activate
+  % source env/bin/activate
   % pip install nsms
   % start-nsms [project-name]
   % pip install -r pip-requires.txt

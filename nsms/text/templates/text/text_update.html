@@ -1,0 +1,53 @@
+{% extends "smartmin/update.html" %}
+
+{% block form-span %}14{% endblock %}
+
+{% block extra-script %}
+{{ block.super }}
+<script>
+
+  $(function(){
+      // add our counter div
+      $("<div class='counter'>&nbsp;</div>").insertAfter("textarea");
+      
+      function updateCounter(){
+          var len = $(this).val().length;
+
+          $(this).next().text(len);
+
+          if (len > 160){
+              $(this).next().addClass("long");
+          } else {
+              $(this).next().removeClass("long");
+          }
+      }
+      
+      // initialize all our text areas
+      $("textarea").each(updateCounter);
+
+      // and register them all for being updated on keyUp
+      $("textarea").keyup(updateCounter);
+  });
+</script>
+{% endblock %}
+
+{% block extra-style %}
+<style>
+  textarea {
+      width: 500px;
+  }
+
+  .counter {
+      float: right;
+      margin-right: 182px;
+      width: 65px;
+      text-align: right;
+      font-size: 10px;
+      color: #555;
+  }
+
+  .long {
+      color: #800;
+  }
+</style>
+{% endblock %}
