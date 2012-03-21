@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='rsms',
-    version=__import__('rsms').__version__,
+    name='nsms',
+    version=__import__('nsms').__version__,
     license="BSD",
 
     install_requires = [
@@ -14,13 +14,13 @@ setup(
     author='Nicolas Pottier',
     author_email='code@nyaruka.com',
 
-    url='http://github.com/nyaruka/rsms',
-    download_url='http://github.com/nyaruka/rsms/downloads',
+    url='http://github.com/nyaruka/nsms',
+    download_url='http://github.com/nyaruka/nsms/downloads',
 
     include_package_data=True,
 
-    packages=['rsms'],
-    scripts=['scripts/start-rsms'],
+    packages=['nsms'],
+    scripts=['scripts/start-nsms'],
 
     zip_safe=False,
     classifiers=[

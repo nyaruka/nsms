@@ -46,12 +46,12 @@
           <li><a href="/router/console">Console</a></li>
           {% endif %}
 
-          {% if perms.rsms.text_list %}
+          {% if perms.nsms.text_list %}
           <li class="dropdown" data-dropdown="dropdown">
             <a href="#" class="dropdown-toggle">Configuration</a>
             <ul class="dropdown-menu">
-              {% if perms.rsms.text_list %}
-              <li><a href="{% url rsms.text_list %}">Translations</a></li>
+              {% if perms.nsms.text_list %}
+              <li><a href="{% url nsms.text_list %}">Translations</a></li>
               {% endif %}
               {% if perms.auth.user_list %}
               <li><a href="/users/user/">Users</a></li>
