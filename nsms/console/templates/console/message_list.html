@@ -1,0 +1,86 @@
+{% extends "smartmin/list.html" %}
+
+{% block pre-content %}
+<div class="page-header"><h2>SMS Message Log</h2></div>
+<p>This console displays all messages which have passed through the system.  You can search incoming and outgoing messages as well as test functionality in the system through the tester below.</p>
+{% endblock %}
+
+{% block post-content %}
+<div class="row">  
+  <br/><br/>
+
+  <div class="tester module span14">
+    <div class="page-header">
+      <h2>Message Tester</h2>
+    </div>
+    <div>
+      <div class="alert-message block-message">
+        You can test the functionality of the system by pretending to be a user here.  Enter the phone number you want to simulate and the message you want to send into the system.  The reply will appear above in the message log.
+      </div>
+      <form method="POST" class="uniForm">
+        <div class="clearfix form-field">
+          <label>Sender: </label><div class="input">{{ form.sender }}</div>
+        </div>
+        <div class="clearfix form-field">
+          <label>Message: </label><div class="input">{{ form.text }}</div>
+        </div>
+
+        <div class="actions">
+          <input class="btn primary" type="submit" value="Test" />
+        </div>
+        {% csrf_token %}
+      </form>
+    </div>
+  </div>
+  <br/>
+</div>
+{% endblock %}
+
+{% block extra-style %}
+<style>
+  table tbody tr td +td +td +td {
+      width: 120px;
+      text-align: right;
+  }
+
+  table tbody tr th +th +th +th {
+      width: 120px;
+      text-align: right;
+  }
+
+  div.in {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/in.png");
+  }
+
+  div.delivered {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/delivered.png");
+  }
+
+  div.sent {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/sent.png");
+  }
+
+  div.queued {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/queued.png");
+  }
+
+  div.console {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/console.png");
+  }
+</style>
+{% endblock %}
