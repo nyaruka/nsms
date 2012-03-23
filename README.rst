@@ -1,7 +1,7 @@
 NyarukaSMS
 ----------------------------------------
 
-NyarumaSMS aims to provide a quick start for a basic python based SMS app using the tools Nyaruka uses to build its systems.  This includes setting up rapidsms, rapidsms-httprouter, smartmin and our parsing and localization libraries.  
+NyarukaSMS aims to provide a quick start for a basic python based SMS app using the tools Nyaruka uses to build its systems.  This includes setting up rapidsms, rapidsms-httprouter, smartmin and our parsing and localization libraries.  
 
 Getting Started
 ----------------
