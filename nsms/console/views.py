@@ -53,11 +53,13 @@ class MessageCRUDL(SmartCRUDL):
         def get_direction(self, obj):
             if obj.direction == 'I':
                 if obj.connection.backend.name == 'console':
-                    style = 'console'
+                    style = 'cin'
                 else:
                     style = 'in'
             else:
-                if obj.status == 'D':
+                if obj.connection.backend.name == 'console':
+                    style = 'cout'
+                elif obj.status == 'D':
                     style = 'delivered'
                 elif obj.status == 'S' or obj.connection.backend.name == 'console':
                     style = 'sent'
