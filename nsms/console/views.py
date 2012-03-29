@@ -21,7 +21,6 @@ class MessageCRUDL(SmartCRUDL):
         field_config = { 'direction': dict(label=" ") }
 
         refresh = 5000
-        template_name = 'console/message_list.html'
 
         def post(self, *args, **kwargs):
             # valid form, then process the message

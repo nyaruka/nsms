@@ -2,21 +2,23 @@
 
 {% block pre-content %}
 <div class="page-header"><h2>SMS Message Log</h2></div>
-<p>This console displays all messages which have passed through the system.  You can search incoming and outgoing messages as well as test functionality in the system through the tester below.</p>
-
-<div class="span10">
-  <table class="table">
-    <tr>
-      <td width="10"><div class="cin">&nbsp;</div></td><td width="120">Incoming test message</td>
-      <td width="10"><div class="in">&nbsp;</div></td><td width="120">Incoming message</td>
-      <td width="10"><div class="queued">&nbsp;</div></td><td width="120">Outgoing message still unsent</td>
-    </tr>
-    <tr>
-      <td><div class="cout">&nbsp;</div></td><td>Outgoing test message</td>
-      <td><div class="delivered">&nbsp;</div></td><td>Outgoing message delivered</td>
-      <td><div class="sent">&nbsp;</div></td><td>Outgoing message sent</td>
-    </tr>
-  </table>
+<div class="well">
+<p>This console displays all messages which have passed through the system.  You can search incoming and outgoing messages as
+ well as test functionality in the system through the tester below.
+</p>
+<br/>
+<table class="table">
+  <tr>
+    <td width="10"><div class="cin">&nbsp;</div></td><td width="120">Incoming test message</td>
+    <td width="10"><div class="in">&nbsp;</div></td><td width="120">Incoming message</td>
+    <td width="10"><div class="queued">&nbsp;</div></td><td width="120">Outgoing message still unsent</td>
+  </tr>
+  <tr>
+    <td><div class="cout">&nbsp;</div></td><td>Outgoing test message</td>
+    <td><div class="delivered">&nbsp;</div></td><td>Outgoing message delivered</td>
+    <td><div class="sent">&nbsp;</div></td><td>Outgoing message sent</td>
+  </tr>
+</table>
 </div>
 {% endblock %}
 
@@ -24,12 +26,12 @@
 <div class="row">  
   <br/><br/>
 
-  <div class="tester module span10">
+  <div class="tester module span12">
     <div class="page-header">
       <h2>Message Tester</h2>
     </div>
     <div>
-      <div class="alert-message block-message">
+      <div class="well">
         You can test the functionality of the system by pretending to be a user here.  Enter the phone number you want to simulate and the message you want to send into the system.  The reply will appear above in the message log.
       </div>
       <form method="POST" class="uniForm">
