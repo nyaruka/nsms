@@ -1,0 +1,14 @@
+*.*~
+*.db
+*.pyc
+#*#
+.DS_Store
+env
+\#*
+\.#*
+/dump.sql
+.coverage
+coverage
+coverage-report
+./bootstrap.css
+bootstrap/*.css
