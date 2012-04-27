@@ -51,6 +51,9 @@ class Parser(object):
         else:
             return word
 
+    def insert_word(self, word):
+        self.rest = "%s %s" % (word, self.rest)
+
     def peek_word(self):
         next_space = self.rest.find(' ')
         word = None

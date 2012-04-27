@@ -1,10 +1,9 @@
 from rapidsms.apps.base import AppBase
 from nsms.parser import Parser
-from nsms.text.models import gettext as _
+from nsms.text import gettext as _
 from nsms.utils import get_sms_profile
 from django.conf import settings
 from django.utils import translation
-import re
 
 # hackery to make sure our translation database contains all our the strings used in this app
 _('lang-current-lang', "Your language is set to {{ language }}.")
