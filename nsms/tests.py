@@ -1,11 +1,9 @@
-from django.test import TestCase
 from django.contrib.auth.models import User, Group
-from urlparse import urlparse
+from smartmin.tests import SmartminTest
 from rapidsms.models import Backend, Connection
 from rapidsms_httprouter.router import get_router
-import datetime
 
-class NSMSTest(TestCase):
+class NSMSTest(SmartminTest):
 
     def setUp(self):
         self.admin = User.objects.create_user('admin', 'admin@admin.com', 'admin')
@@ -28,11 +26,6 @@ class NSMSTest(TestCase):
     def assertAtURL(self, response, url):
         self.assertEquals(response.request['PATH_INFO'], url,
                         "At url: %s instead of %s" % (response.request['PATH_INFO'], url))
-
-    def assertRedirect(self, response, url):
-        self.assertEquals(302, response.status_code)
-        segments = urlparse(response.get('Location', None))
-        self.assertEquals(segments.path, url)
 
     def assertInitial(self, response, field, value):
         self.assertTrue('form' in response.context)
