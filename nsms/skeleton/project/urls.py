@@ -12,6 +12,9 @@ urlpatterns = patterns('',
     # add your apps here
     url('', include('dashboard.urls')),
     url('^mileage/', include('mileage.urls')),
+
+    # django-sentry for error logging
+    (r'^sentry/', include('sentry.web.urls')),
 )
 
 # site static for development
