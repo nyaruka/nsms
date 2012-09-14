@@ -18,6 +18,13 @@ class MessageCRUDL(SmartCRUDL):
         def get_number(self, obj):
             return obj.connection.identity
 
+        def derive_queryset(self, **kwargs):
+            # get our parent queryset
+            queryset = super(MessageCRUDL.Csv, self).derive_queryset(**kwargs)
+
+            # return our queryset
+            return queryset.select_related(depth=1)
+
     class List(SmartListView, SmartFormMixin):
         title = "Message Console"
 
