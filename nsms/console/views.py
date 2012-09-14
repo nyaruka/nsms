@@ -8,9 +8,15 @@ class MessageTesterForm(forms.Form):
     text = forms.CharField(max_length=160, label="Message", widget=forms.TextInput(attrs={'size':'60'}))
 
 class MessageCRUDL(SmartCRUDL):
-    actions = ('list',)
+    actions = ('list', 'csv')
     model = Message
     permissions = True
+
+    class Csv(SmartCsvView):
+        fields = ('date', 'direction', 'number', 'text',)
+
+        def get_number(self, obj):
+            return obj.connection.identity
 
     class List(SmartListView, SmartFormMixin):
         title = "Message Console"

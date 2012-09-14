@@ -259,7 +259,7 @@ PERMISSIONS = {
           'delete', # can delete an object,
           'list'),  # can view a list of the objects
     # Add new object level permissions here:
-    # 'subjects.subject': ('csv', 'delivered', 'stopped'),
+    'rapidsms_httprouter.message': ('csv',)
 }
 
 # assigns the permissions that each group should have
