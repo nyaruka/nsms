@@ -2,7 +2,14 @@
 from settings_common import *
 
 DEBUG = False
-TEMPLATE_DEBUG = False
+TEMPLATE_DEBUG = DEBUG
+
+# these guys will get email from sentry
+ADMINS = (
+   ('Nyaruka Ops', 'ops@nyaruka.com'),
+)
+
+MANAGERS = ADMINS
 
 # add gunicorn
 INSTALLED_APPS = INSTALLED_APPS + ('gunicorn',)
@@ -21,6 +28,7 @@ DATABASES = {
         'PORT': '', 
         'OPTIONS': {
                "init_command": "SET storage_engine=INNODB",
+               "charset": "utf8", 
         }  
     }
 }

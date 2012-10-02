@@ -1,0 +1,116 @@
+{% extends "smartmin/list.html" %}
+
+{% block table-buttons %}
+{% if perms.rapidsms_httprouter.message_csv %}
+<a class="btn pull-right" href="{% url console.message_csv %}">Export</a>
+{% endif %}
+{% endblock table-buttons %}
+
+{% block pre-content %}
+<div class="page-header"><h2>SMS Message Log</h2></div>
+<div class="well">
+<p>This console displays all messages which have passed through the system.  You can search incoming and outgoing messages as
+ well as test functionality in the system through the tester below.
+</p>
+<br/>
+<table class="table">
+  <tr>
+    <td width="10"><div class="cin">&nbsp;</div></td><td width="120">Incoming test message</td>
+    <td width="10"><div class="in">&nbsp;</div></td><td width="120">Incoming message</td>
+    <td width="10"><div class="queued">&nbsp;</div></td><td width="120">Outgoing message still unsent</td>
+  </tr>
+  <tr>
+    <td><div class="cout">&nbsp;</div></td><td>Outgoing test message</td>
+    <td><div class="delivered">&nbsp;</div></td><td>Outgoing message delivered</td>
+    <td><div class="sent">&nbsp;</div></td><td>Outgoing message sent</td>
+  </tr>
+</table>
+</div>
+{% endblock %}
+
+{% block post-content %}
+<div class="row">  
+  <br/><br/>
+
+  <div class="tester module span12">
+    <div class="page-header">
+      <h2>Message Tester</h2>
+    </div>
+    <div>
+      <div class="well">
+        You can test the functionality of the system by pretending to be a user here.  Enter the phone number you want to simulate and the message you want to send into the system.  The reply will appear above in the message log.
+      </div>
+      <form method="POST" class="uniForm">
+        <div class="clearfix form-field">
+          <label>Sender: </label><div class="input">{{ form.sender }}</div>
+        </div>
+        <div class="clearfix form-field">
+          <label>Message: </label><div class="input">{{ form.text }}</div>
+        </div>
+
+        <div class="actions">
+          <input class="btn primary" type="submit" value="Test" />
+        </div>
+        {% csrf_token %}
+      </form>
+    </div>
+  </div>
+  <br/>
+</div>
+{% endblock %}
+
+{% block extra-style %}
+<style>
+  #pjax table tbody tr td +td +td +td {
+      width: 120px;
+      text-align: right;
+  }
+
+  #pjax table tbody tr th +th +th +th {
+      width: 120px;
+      text-align: right;
+  }
+
+  div.in {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/in.png");
+  }
+
+  div.delivered {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/delivered.png");
+  }
+
+  div.sent {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/sent.png");
+  }
+
+  div.queued {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/queued.png");
+  }
+
+  div.cin {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/cin.png");
+  }
+
+  div.cout {
+      width: 10px;
+      height: 15px;
+      background-repeat: no-repeat;
+      background-image: url("{{ STATIC_URL }}console/cout.png");
+  }
+</style>
+{% endblock %}

@@ -1,6 +1,6 @@
 {% extends "smartmin/update.html" %}
 
-{% block form-span %}14{% endblock %}
+{% block form-span %}span12{% endblock %}
 
 {% block extra-script %}
 {{ block.super }}
@@ -8,17 +8,17 @@
 
   $(function(){
       // add our counter div
-      $("<div class='counter'>&nbsp;</div>").insertAfter("textarea");
+      $("<div class='counter'>&nbsp;</div>").insertBefore("textarea");
       
       function updateCounter(){
           var len = $(this).val().length;
 
-          $(this).next().text(len);
+          $(this).prev().text(len);
 
           if (len > 160){
-              $(this).next().addClass("long");
+              $(this).prev().addClass("long");
           } else {
-              $(this).next().removeClass("long");
+              $(this).prev().removeClass("long");
           }
       }
       
@@ -39,8 +39,10 @@
 
   .counter {
       float: right;
-      margin-right: 182px;
-      width: 65px;
+      position: absolute;
+      width: 25px;
+      margin-left: -45px;
+      margin-top: 20px;
       text-align: right;
       font-size: 10px;
       color: #555;

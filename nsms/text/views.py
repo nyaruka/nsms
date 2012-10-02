@@ -1,6 +1,27 @@
 from smartmin.views import *
 from .models import *
 from django import forms
+from django.template.base import Template
+
+class TextForm(forms.ModelForm):
+
+    def clean(self):
+        cleaned_data = super(TextForm, self).clean()
+
+        # look for any transation
+        for field in cleaned_data.keys():
+            if field.find('text') == 0:
+                value = cleaned_data[field]
+                if value:
+                    try:
+                        template = Template(value)
+                    except Exception as e:
+                        raise forms.ValidationError("There was an error in your template.  %s" % e)
+
+        return cleaned_data
+
+    class Meta:
+        model = Text
 
 class TextCRUDL(SmartCRUDL):
     actions = ('update', 'list')
@@ -20,6 +41,7 @@ class TextCRUDL(SmartCRUDL):
 
     class Update(TextFieldMixin, SmartUpdateView):
         exclude = ('slug', 'is_active', 'text', 'created_by', 'modified_by')
+        form_class = TextForm
 
         def derive_title(self):
             return self.object.slug

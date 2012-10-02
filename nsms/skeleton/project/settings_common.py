@@ -101,7 +101,7 @@ SECRET_KEY = 'bangbangrootplaydeadn7#^+-u-#1wm=y3a$-#^jps5tihx5v_@-_(kxumq_$+$5r
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 
@@ -183,6 +183,9 @@ INSTALLED_APPS = (
     # translation of messages
     'nsms.text',
 
+    # console
+    'nsms.console',
+
     # our sample app
     'mileage',
 )
@@ -256,7 +259,7 @@ PERMISSIONS = {
           'delete', # can delete an object,
           'list'),  # can view a list of the objects
     # Add new object level permissions here:
-    # 'subjects.subject': ('csv', 'delivered', 'stopped'),
+    'rapidsms_httprouter.message': ('csv',)
 }
 
 # assigns the permissions that each group should have
@@ -328,15 +331,16 @@ DEFAULT_COUNTRY_CODE = "250"
 INTERNAL_IPS = ('127.0.0.1',)
 
 #-----------------------------------------------------------------------------------
-# Crontab Settings
+# Crontab Settings .. uncomment if you want to use Celery's crontab-like
+# functionality.
 #-----------------------------------------------------------------------------------
 
-from datetime import timedelta
+#from datetime import timedelta
 
-CELERYBEAT_SCHEDULE = {
-    "runs-every-hour": {
-        "task": "reminders.tasks.check_reminders",
-        "schedule": timedelta(hours=1),
-    },
-}
+#CELERYBEAT_SCHEDULE = {
+#    "runs-every-hour": {
+#        "task": "reminders.tasks.check_reminders",
+#        "schedule": timedelta(hours=1),
+#    },
+#}
 
