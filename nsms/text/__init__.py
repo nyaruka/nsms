@@ -18,6 +18,10 @@ def gettext(slug, default_string, variables=None):
     if variables is None:
         return text
     else:
-        # our text is a template, perform substitutions on it
-        template = Template("%s" % text)
-        return template.render(Context(variables))
+        try:
+            # our text is a template, perform substitutions on it
+            template = Template("%s" % text)
+            return template.render(Context(variables))
+        except Exception as e:
+            # if we throw an error, display the raw template
+            return text
