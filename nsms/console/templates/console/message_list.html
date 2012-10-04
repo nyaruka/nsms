@@ -8,7 +8,6 @@
 
 {% block pre-content %}
 <div class="page-header"><h2>SMS Message Log</h2></div>
-<div id="message_activity" style="min-width: 700px; height: 160px; margin: 0 auto"></div>
 {% endblock %}
 
 {% block post-content %}
@@ -121,75 +120,3 @@
 </style>
 {% endblock %}
 
-{% block extra-script %}
-<script>
-  $(function () {
-    var chart;
-    $(document).ready(function() {
-        chart = new Highcharts.Chart({
-            chart: {
-                renderTo: 'message_activity',
-                type: 'column'
-            },
-            colors: [
-                '#4572A7', 
-         	'#89A54E', 
-            ],
-            credits: {
-                 enabled: false
-            },
-            title: {
-                text: null
-            },
-            xAxis: {
-                type: 'datetime',
-                dateTimeLabelFormats: { 
-                    month: '%b %e',
-                    year: '%b'
-                }
-            },
-            legend: {
-                enabled: false
-            },
-            yAxis: {
-                title: {
-                     text: 'Messages'
-                },
-                min: 0
-            },
-            tooltip: {
-                formatter: function() {
-                    return '<b>'+ this.series.name +'</b><br/>' + 
-                        Highcharts.dateFormat('%B %e', this.x) +' - '+ this.y;
-                }
-            },
-            
-            series: [
-                {
-                stacking: 'normal',
-                name: 'Incoming',
-                data: [
-                    {% for count in incoming_counts %}
-                    [Date.UTC( {{ count.created.year }},  {{ count.created.month}}-1 , {{ count.created.day }} ), {{ count.created_on_count }}  ]
-                    {% if not forloop.last %},{% endif %}
-                    {% endfor %}
-                ]
-                }
-                ,
-                
-                {
-                stacking: 'normal',
-                name: 'Outgoing',
-                data: [
-                    {% for count in outgoing_counts %}
-                    [Date.UTC( {{ count.created.year }},  {{ count.created.month}}-1 , {{ count.created.day }} ), {{ count.created_on_count }}  ]
-                    {% if not forloop.last %},{% endif %}
-                    {% endfor %}
-                ]
-                }
-            ]
-        });
-    });
-  });
-</script>
-{% endblock %}
