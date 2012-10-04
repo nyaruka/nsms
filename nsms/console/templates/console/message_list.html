@@ -8,27 +8,29 @@
 
 {% block pre-content %}
 <div class="page-header"><h2>SMS Message Log</h2></div>
-<div class="well">
-<p>This console displays all messages which have passed through the system.  You can search incoming and outgoing messages as
- well as test functionality in the system through the tester below.
-</p>
-<br/>
-<table class="table">
-  <tr>
-    <td width="10"><div class="cin">&nbsp;</div></td><td width="120">Incoming test message</td>
-    <td width="10"><div class="in">&nbsp;</div></td><td width="120">Incoming message</td>
-    <td width="10"><div class="queued">&nbsp;</div></td><td width="120">Outgoing message still unsent</td>
-  </tr>
-  <tr>
-    <td><div class="cout">&nbsp;</div></td><td>Outgoing test message</td>
-    <td><div class="delivered">&nbsp;</div></td><td>Outgoing message delivered</td>
-    <td><div class="sent">&nbsp;</div></td><td>Outgoing message sent</td>
-  </tr>
-</table>
-</div>
+<div id="message_activity" style="min-width: 700px; height: 160px; margin: 0 auto"></div>
 {% endblock %}
 
 {% block post-content %}
+<div class="row" style="padding-top: 10px">
+  <div class="span12">
+    <div class="well" style="padding-bottom: 0px; padding-top: 0px;">
+      <table class="table">
+	<tr class="first">
+	  <td width="10"><div class="cin">&nbsp;</div></td><td width="120">Incoming test message</td>
+	  <td width="10"><div class="in">&nbsp;</div></td><td width="120">Incoming message</td>
+	  <td width="10"><div class="queued">&nbsp;</div></td><td width="120">Outgoing message still unsent</td>
+	</tr>
+	<tr>
+	  <td><div class="cout">&nbsp;</div></td><td>Outgoing test message</td>
+	  <td><div class="delivered">&nbsp;</div></td><td>Outgoing message delivered</td>
+	  <td><div class="sent">&nbsp;</div></td><td>Outgoing message sent</td>
+	</tr>
+      </table>
+    </div>
+  </div>
+</div>
+
 <div class="row">  
   <br/><br/>
 
@@ -61,6 +63,10 @@
 
 {% block extra-style %}
 <style>
+  tr.first td {
+    border-top: 0px;
+  }
+
   #pjax table tbody tr td +td +td +td {
       width: 120px;
       text-align: right;
@@ -113,4 +119,77 @@
       background-image: url("{{ STATIC_URL }}console/cout.png");
   }
 </style>
+{% endblock %}
+
+{% block extra-script %}
+<script>
+  $(function () {
+    var chart;
+    $(document).ready(function() {
+        chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'message_activity',
+                type: 'column'
+            },
+            colors: [
+                '#4572A7', 
+         	'#89A54E', 
+            ],
+            credits: {
+                 enabled: false
+            },
+            title: {
+                text: null
+            },
+            xAxis: {
+                type: 'datetime',
+                dateTimeLabelFormats: { 
+                    month: '%b %e',
+                    year: '%b'
+                }
+            },
+            legend: {
+                enabled: false
+            },
+            yAxis: {
+                title: {
+                     text: 'Messages'
+                },
+                min: 0
+            },
+            tooltip: {
+                formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>' + 
+                        Highcharts.dateFormat('%B %e', this.x) +' - '+ this.y;
+                }
+            },
+            
+            series: [
+                {
+                stacking: 'normal',
+                name: 'Incoming',
+                data: [
+                    {% for count in incoming_counts %}
+                    [Date.UTC( {{ count.created.year }},  {{ count.created.month}}-1 , {{ count.created.day }} ), {{ count.created_on_count }}  ]
+                    {% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+                }
+                ,
+                
+                {
+                stacking: 'normal',
+                name: 'Outgoing',
+                data: [
+                    {% for count in outgoing_counts %}
+                    [Date.UTC( {{ count.created.year }},  {{ count.created.month}}-1 , {{ count.created.day }} ), {{ count.created_on_count }}  ]
+                    {% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ]
+                }
+            ]
+        });
+    });
+  });
+</script>
 {% endblock %}
