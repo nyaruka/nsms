@@ -10,12 +10,12 @@ class MessageTesterForm(forms.Form):
     text = forms.CharField(max_length=160, label="Message", widget=forms.TextInput(attrs={'size':'60'}))
 
 class MessageCRUDL(SmartCRUDL):
-    actions = ('list', 'csv')
+    actions = ('list', 'csv', 'monthly')
     model = Message
     permissions = True
 
     class Csv(SmartCsvView):
-        fields = ('date', 'direction', 'number', 'text',)
+        fields = ('date', 'direction', 'number', 'text')
 
         def get_number(self, obj):
             return obj.connection.identity
@@ -26,6 +26,54 @@ class MessageCRUDL(SmartCRUDL):
 
             # return our queryset
             return queryset.select_related(depth=1)
+
+    class Monthly(SmartListView):
+        title = "Monthly Message Volume"
+
+        def build_monthly_counts(self, objects, **filters):
+            counts = objects.filter(**filters).order_by('date').extra({'month':"month(date)", 'year':"year(date)"}).values('month', 'year').annotate(created_on_count=Count('id'))
+            
+            for count in counts:
+                count['created'] = datetime.datetime(day=1, month=count['month'], year=count['year'])
+
+            return counts
+
+        def get_context_data(self, **kwargs):
+            context = super(MessageCRUDL.Monthly, self).get_context_data(**kwargs)
+            
+            # get our queryset
+            objects = self.derive_queryset().order_by('date')
+
+            # break it up by date counts
+            context['incoming_counts'] = self.build_monthly_counts(objects, direction='I')
+            context['outgoing_counts'] = self.build_monthly_counts(objects, direction='O')
+
+            # build our breakdown
+            month = objects[0].date.month
+            year = objects[0].date.year
+
+            start = datetime.datetime(day=1, month=month, year=year)
+            today = datetime.datetime.now()
+            
+            counts = []
+            while start < today:
+                if month == 12: 
+                    month = 1; year += 1
+                else:
+                    month += 1
+
+                end = datetime.datetime(day=1, month=month, year=year)
+
+                incoming_count = objects.filter(date__gte=start, date__lt=end, direction='I').count()
+                outgoing_count = objects.filter(date__gte=start, date__lt=end, direction='O').count()
+                total = incoming_count + outgoing_count
+
+                counts.append(dict(start=start, incoming=incoming_count, outgoing=outgoing_count, total=total))
+                start = end
+
+            context['counts'] = counts
+
+            return context
 
     class List(SmartListView, SmartFormMixin):
         title = "Message Console"
