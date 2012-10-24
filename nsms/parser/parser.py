@@ -7,12 +7,17 @@ class ParseException(Exception):
 
 class Parser(object):
 
-    def __init__(self, msg):
+    def __init__(self, msg, delimiter=' '):
         self.msg = msg
-        self.rest = self.msg.strip()
+        self.delimiter = delimiter
+
+        # delimiters delimiters at both ends and space if available
+        self.rest = self.msg.strip(delimiter).strip()
 
     def get_word_count(self):
-        return len(self.rest.split())
+        if len(self.rest) > 0:
+            return len(self.rest.split(self.delimiter))
+        return 0
 
     word_count = property(get_word_count)
 
@@ -36,12 +41,13 @@ class Parser(object):
             return keyword
 
     def next_word(self, error_msg=None):
-        next_space = self.rest.find(' ')
+        next_delimiter = self.rest.find(self.delimiter)
         word = None
 
-        if next_space > 0:
-            word = self.rest[:next_space]
-            self.rest = self.rest[next_space:].strip()
+        if next_delimiter > 0:
+            word = self.rest[:next_delimiter]
+
+            self.rest = self.rest[next_delimiter:].strip()
         elif self.rest:
             word = self.rest
             self.rest = ""
@@ -55,7 +61,7 @@ class Parser(object):
         self.rest = "%s %s" % (word, self.rest)
 
     def peek_word(self):
-        next_space = self.rest.find(' ')
+        next_space = self.rest.find(self.delimiter)
         word = None
 
         if next_space > 0:
@@ -155,6 +161,3 @@ class Parser(object):
             raise ParseException(error_msg)
 
         return date
-            
-        
-        

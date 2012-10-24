@@ -4,16 +4,35 @@ import datetime
 
 class ParserTest(TestCase):
 
-    def assertNextWord(self, truth, sms):
-        parser = Parser(sms)
+    def assertNextWord(self, truth, sms, delimiter=' '):
+        # parser with delimiter
+        parser = Parser(sms, delimiter)
         self.assertEquals(truth, parser.next_word())
 
     def test_word_parsing(self):
         self.assertNextWord("reg", "reg bach")
+        self.assertNextWord("reg", "reg, bach", ',')
+        self.assertNextWord("reg", "reg. bach", '.')
+
         self.assertNextWord("reg", "reg mozart")
+        self.assertNextWord("reg", "reg, mozart", ',')
+        self.assertNextWord("reg", "reg. mozart", '.')
+
         self.assertNextWord("r", "r handell")
-        self.assertNextWord(None, "  ")
+        self.assertNextWord("r", "r, handell", ',')
+        self.assertNextWord("r", "r. handell", '.')
+
+        self.assertNextWord(None, ", ", ',')
+        self.assertNextWord(None, ". ", '.')
+
         self.assertNextWord("..", "..")
+        self.assertNextWord(None, "  ")
+
+        self.assertNextWord("..", "..", ',')
+        self.assertNextWord(None, ",,", ',')
+
+        self.assertNextWord(",,", ",,", '.')
+        self.assertNextWord(None, "..", '.')
 
     def assertNextKeyword(self, truth, sms, keywords):
         parser = Parser(sms)
