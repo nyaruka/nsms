@@ -47,7 +47,7 @@ class Parser(object):
         if next_delimiter > 0:
             word = self.rest[:next_delimiter]
 
-            self.rest = self.rest[next_delimiter:].strip()
+            self.rest = self.rest[next_delimiter:].strip(self.delimiter).strip()
         elif self.rest:
             word = self.rest
             self.rest = ""
@@ -126,11 +126,12 @@ class Parser(object):
 
         return integer
 
-    def next_date(self, error_msg=None):
+    def next_date(self, separator='.', error_msg=None):
         date = self.next_word(error_msg)
 
-        # does it match our format?  dd.mm.yy 
-        match = re.search("(\d+)\.(\d+)\.(\d+)", date)
+        # does it match our format?  dd[separator]mm[separator]yy 
+        date_regex = r"(\d+)"+ re.escape(separator) +r"(\d+)"+ re.escape(separator) +r"(\d+)"
+        match = re.search(date_regex, date)
         if not match:
             date = None
         else:

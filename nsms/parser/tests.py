@@ -34,73 +34,137 @@ class ParserTest(TestCase):
         self.assertNextWord(",,", ",,", '.')
         self.assertNextWord(None, "..", '.')
 
-    def assertNextKeyword(self, truth, sms, keywords):
-        parser = Parser(sms)
+    def assertNextKeyword(self, truth, sms, keywords, delimiter=' '):
+        parser = Parser(sms, delimiter)
         self.assertEquals(truth, parser.next_keyword(keywords))
 
     def test_keyword_parsing(self):
         KEYWORDS = ["register", "reg"]
-        self.assertNextKeyword("reg", "reg bach", KEYWORDS)
-        self.assertNextKeyword("register", "register bach", KEYWORDS)
-        self.assertNextKeyword("reg", "REG bach", KEYWORDS)
-        self.assertNextKeyword(None, "notkeyword bach", KEYWORDS)
-        self.assertNextKeyword(None, " ", KEYWORDS)
 
-    def assertNextPhone(self, truth, sms):
-        parser = Parser(sms)
+        self.assertNextKeyword("reg", "reg bach", KEYWORDS)
+        self.assertNextKeyword("reg", "reg, bach", KEYWORDS, ',')
+        self.assertNextKeyword("reg", "reg. bach", KEYWORDS, '.')
+
+        self.assertNextKeyword("register", "register bach", KEYWORDS)
+        self.assertNextKeyword("register", "register, bach", KEYWORDS, ',')
+        self.assertNextKeyword("register", "register. bach", KEYWORDS, '.')
+
+        self.assertNextKeyword("reg", "REG bach", KEYWORDS)
+        self.assertNextKeyword("reg", "REG, bach", KEYWORDS, ',')
+        self.assertNextKeyword("reg", "REG. bach", KEYWORDS, '.')
+
+        self.assertNextKeyword(None, "notkeyword bach", KEYWORDS)
+        self.assertNextKeyword(None, "notkeyword, bach", KEYWORDS, ',')
+        self.assertNextKeyword(None, "notkeyword. bach", KEYWORDS, '.')
+
+        self.assertNextKeyword(None, " ", KEYWORDS)
+        self.assertNextKeyword(None, ",", KEYWORDS, ',')
+        self.assertNextKeyword(None, ".", KEYWORDS, '.')
+
+    def assertNextPhone(self, truth, sms, delimiter=' '):
+        parser = Parser(sms, delimiter)
         self.assertEquals(truth, parser.next_phone())
 
     def test_phone_parsing(self):
         self.assertNextPhone("0788383388", "  0788383388 Bach")
+        self.assertNextPhone("0788383388", "  0788383388, Bach", ',')
+        self.assertNextPhone("0788383388", "  0788383388. Bach", '.')
+
         self.assertNextPhone("250788383388", "  250788383388")
+        self.assertNextPhone("250788383388", "  250788383388", ',')
+        self.assertNextPhone("250788383388", "  250788383388", '.')
+
         self.assertNextPhone("250788383388", " +250788383388")
+        self.assertNextPhone("250788383388", " +250788383388", ',')
+        self.assertNextPhone("250788383388", " +250788383388", '.')
 
         # nothing there
         self.assertNextPhone(None, " ")
+        self.assertNextPhone(None, " ", ',')
+        self.assertNextPhone(None, " ", '.')
 
         # not numeric
         self.assertNextPhone(None, "078838338a")
+        self.assertNextPhone(None, "078838338a", ',')
+        self.assertNextPhone(None, "078838338a", '.')
 
         # not correct length
         self.assertNextPhone(None, "07883833881")
+        self.assertNextPhone(None, "07883833881", ',')
+        self.assertNextPhone(None, "07883833881", '.')
 
-    def assertNextDate(self, truth_day, truth_month, truth_year, sms):
+    def assertNextDate(self, truth_day, truth_month, truth_year, sms, separator='.'):
         parser = Parser(sms)
         truth = None
 
         if truth_day:
             truth = datetime.date(day=truth_day, month=truth_month, year=truth_year)
 
-        self.assertEquals(truth, parser.next_date())
+        self.assertEquals(truth, parser.next_date(separator=separator))
 
     def test_date_parsing(self):
         self.assertNextDate(23, 6, 1977, "23.6.77")
+        self.assertNextDate(23, 6, 1977, "23/6/77", separator='/')
+        self.assertNextDate(23, 6, 1977, "23-6-77", separator='-')
+
         self.assertNextDate(23, 6, 1977, "23.06.77")
+        self.assertNextDate(23, 6, 1977, "23/06/77", separator='/')
+        self.assertNextDate(23, 6, 1977, "23-06-77", separator='-')
+
         self.assertNextDate(23, 6, 2011, "23.06.11")
+        self.assertNextDate(23, 6, 2011, "23/06/11", separator='/')
+        self.assertNextDate(23, 6, 2011, "23-06-11", separator='-')
+
         self.assertNextDate(23, 6, 2000, "23.06.00")
+        self.assertNextDate(23, 6, 2000, "23/06/00", separator='/')
+        self.assertNextDate(23, 6, 2000, "23-06-00", separator='-')
 
         # invalid day
         self.assertNextDate(None, None, None, "31.6.77")
+        self.assertNextDate(None, None, None, "31/6/77", separator='/')
+        self.assertNextDate(None, None, None, "31-6-77", separator='-')
 
         # invalid month
         self.assertNextDate(None, None, None, "10.13.77")
+        self.assertNextDate(None, None, None, "10/13/77", separator='/')
+        self.assertNextDate(None, None, None, "10-13-77", separator='-')
 
         # invalid year
         self.assertNextDate(None, None, None, "10.13.113")
+        self.assertNextDate(None, None, None, "10/13/113", separator='/')
+        self.assertNextDate(None, None, None, "10-13-113", separator='-')
 
         # invalid format
         self.assertNextDate(None, None, None, "10 12 31")
+        self.assertNextDate(None, None, None, "10.12.31", separator='/')
+        self.assertNextDate(None, None, None, "10/12/31", separator='-')
 
-    def assertWordCount(self, truth, sms):
-        parser = Parser(sms)
+    def assertWordCount(self, truth, sms, delimiter=' '):
+        parser = Parser(sms,delimiter)
         self.assertEquals(truth, parser.word_count)
 
     def test_word_count(self):
         self.assertWordCount(0, "  ")
+        self.assertWordCount(0, "  ", ',')
+        self.assertWordCount(0, ", ", ',')
+        self.assertWordCount(0, "  ", '.')
+        self.assertWordCount(0, ". ", '.')
+
         self.assertWordCount(0, "")
+        self.assertWordCount(0, "", ',')
+        self.assertWordCount(0, "", '.')
+
         self.assertWordCount(1, "  hello  ")
+        self.assertWordCount(1, "  hello  ", ',')
+        self.assertWordCount(1, "  hello  ", '.')
+
         self.assertWordCount(2, "  hello. world")
+        self.assertWordCount(2, "  hello., world", ',')
+        self.assertWordCount(2, "  hello,. world", '.')
+
         self.assertWordCount(2, " hello world.foo")
+        self.assertWordCount(2, " hello, world.foo", ',')
+        self.assertWordCount(2, " hello. world,foo", '.')
 
     def test_parsing(self):
         parser = Parser("REG James Kirk 10.12.44 0788383381")
@@ -109,6 +173,26 @@ class ParserTest(TestCase):
         self.assertEquals("James", parser.next_word())
         self.assertEquals("Kirk", parser.next_word())
         self.assertEquals(datetime.date(day=10, month=12, year=1944), parser.next_date())
+        self.assertEquals("0788383381", parser.next_phone())
+
+        self.assertFalse(parser.has_word())
+
+        parser = Parser("REG, James, Kirk, 10.12.44, 0788383381", ',')
+
+        self.assertEquals("reg", parser.next_keyword(["reg"]))
+        self.assertEquals("James", parser.next_word())
+        self.assertEquals("Kirk", parser.next_word())
+        self.assertEquals(datetime.date(day=10, month=12, year=1944), parser.next_date())
+        self.assertEquals("0788383381", parser.next_phone())
+
+        self.assertFalse(parser.has_word())
+
+        parser = Parser("REG. James. Kirk. 10/12/44. 0788383381", '.')
+
+        self.assertEquals("reg", parser.next_keyword(["reg"]))
+        self.assertEquals("James", parser.next_word())
+        self.assertEquals("Kirk", parser.next_word())
+        self.assertEquals(datetime.date(day=10, month=12, year=1944), parser.next_date(separator='/'))
         self.assertEquals("0788383381", parser.next_phone())
 
         self.assertFalse(parser.has_word())
