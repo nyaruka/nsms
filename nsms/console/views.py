@@ -79,7 +79,7 @@ class MessageCRUDL(SmartCRUDL):
         title = "Message Console"
 
         fields = ('direction', 'number', 'text', 'date')
-        default_order = ('-date',)
+        default_order = '-date'
         search_fields = ('text', 'connection__identity__icontains')
         field_config = { 'direction': dict(label=" ") }
 
@@ -125,6 +125,7 @@ class MessageCRUDL(SmartCRUDL):
                 context['form'] = MessageTesterForm(self.request.POST)
             else:
                 context['form'] = MessageTesterForm()
+
             return context
         
         def get_number(self, obj):
