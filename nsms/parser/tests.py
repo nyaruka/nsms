@@ -19,6 +19,11 @@ class ParserTest(TestCase):
         self.assertNextWord("reg", "reg, bach", '.',',', ' ')
         self.assertNextWord("reg", "reg, bach", ',',' ', '.')
 
+        self.assertNextWord("reg", "reg.bach", ' ',',', '.')
+        self.assertNextWord("reg", "reg.,bach", ' ',',', '.')
+        self.assertNextWord("reg", "reg..bach", ' ',',', '.')
+        self.assertNextWord("reg", "reg,bach", ' ',',', '.')
+
         self.assertNextWord("reg", "reg mozart")
         self.assertNextWord("reg", "reg, mozart", ',')
         self.assertNextWord("reg", "reg. mozart", '.')
