@@ -253,3 +253,45 @@ class ParserTest(TestCase):
         self.assertEquals("0788383381", parser.next_phone())
 
         self.assertFalse(parser.has_word())
+
+        parser = Parser("REG.James.Kirk.10/12/44.0788383381", '.')
+
+        self.assertEquals("reg", parser.next_keyword(["reg"]))
+        self.assertEquals("James", parser.next_word())
+        self.assertEquals("Kirk", parser.next_word())
+        self.assertEquals(datetime.date(day=10, month=12, year=1944), parser.next_date())
+        self.assertEquals("0788383381", parser.next_phone())
+
+        self.assertFalse(parser.has_word())
+
+        parser = Parser("REG.James.Kirk.10/12/44.0788383381", '.', ' ', ',')
+
+        self.assertEquals("reg", parser.next_keyword(["reg"]))
+        self.assertEquals("James", parser.next_word())
+        self.assertEquals("Kirk", parser.next_word())
+        self.assertEquals(datetime.date(day=10, month=12, year=1944), parser.next_date())
+        self.assertEquals("0788383381", parser.next_phone())
+
+        self.assertFalse(parser.has_word())
+
+
+        parser = Parser("REG.James,Kirk 10/12/44,0788383381", '.', ' ', ',')
+
+        self.assertEquals("reg", parser.next_keyword(["reg"]))
+        self.assertEquals("James", parser.next_word())
+        self.assertEquals("Kirk", parser.next_word())
+        self.assertEquals(datetime.date(day=10, month=12, year=1944), parser.next_date())
+        self.assertEquals("0788383381", parser.next_phone())
+
+        self.assertFalse(parser.has_word())
+
+        parser = Parser("REG James,.Kirk, . 10/12/44,0788383381", '.', ' ', ',')
+
+        self.assertEquals("reg", parser.next_keyword(["reg"]))
+        self.assertEquals("James", parser.next_word())
+        self.assertEquals("Kirk", parser.next_word())
+        self.assertEquals(datetime.date(day=10, month=12, year=1944), parser.next_date())
+        self.assertEquals("0788383381", parser.next_phone())
+
+        self.assertFalse(parser.has_word())
+
