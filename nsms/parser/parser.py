@@ -7,12 +7,18 @@ class ParseException(Exception):
 
 class Parser(object):
 
-    def __init__(self, msg, delimiter=' '):
+    def __init__(self, msg, *args):
         self.msg = msg
-        self.delimiter = delimiter
+        self.delimiter = ' '
+        self.args = args
+        if args:
+            self.delimiter = args[0]
+            for arg_count in range(1,len(args)):
+                self.msg = self.msg.replace(args[arg_count],self.delimiter)
 
         # delimiters delimiters at both ends and space if available
-        self.rest = self.msg.strip(delimiter).strip()
+        self.rest = self.msg.strip(self.delimiter).strip()
+        
 
     def get_word_count(self):
         if len(self.rest) > 0:
@@ -47,7 +53,7 @@ class Parser(object):
         if next_delimiter > 0:
             word = self.rest[:next_delimiter]
 
-            self.rest = self.rest[next_delimiter:].strip()
+            self.rest = self.rest[next_delimiter:].strip(self.delimiter).strip()
         elif self.rest:
             word = self.rest
             self.rest = ""
@@ -129,8 +135,9 @@ class Parser(object):
     def next_date(self, error_msg=None):
         date = self.next_word(error_msg)
 
-        # does it match our format?  dd.mm.yy 
-        match = re.search("(\d+)\.(\d+)\.(\d+)", date)
+        # does it match our format?  dd[separator]mm[separator]yy 
+        date_regex = r'(\d+)[\.|\/|-](\d+)[\.|\/|-](\d+)'
+        match = re.search(date_regex, date)
         if not match:
             date = None
         else:
