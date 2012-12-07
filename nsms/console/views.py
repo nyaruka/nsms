@@ -1,4 +1,5 @@
 from smartmin.views import *
+from rapidsms.models import Backend
 from rapidsms_httprouter.models import Message
 from rapidsms_httprouter.router import get_router
 from django.utils.safestring import mark_safe
@@ -80,10 +81,20 @@ class MessageCRUDL(SmartCRUDL):
 
         fields = ('direction', 'number', 'text', 'date')
         default_order = '-date'
-        search_fields = ('text', 'connection__identity__icontains')
+        search_fields = ('text__icontains', 'connection__identity__icontains')
         field_config = { 'direction': dict(label=" ") }
 
         refresh = 5000
+
+        def derive_queryset(self, *args, **kwargs):
+            queryset = super(MessageCRUDL.List, self).derive_queryset(*args, **kwargs)
+
+            # filter by backend id if there is one in our request
+            backend_id = int(self.request.REQUEST.get('backend_id', 0))
+            if backend_id:
+                queryset = queryset.filter(connection__backend=backend_id)
+
+            return queryset
 
         def post(self, *args, **kwargs):
             # valid form, then process the message
@@ -95,7 +106,7 @@ class MessageCRUDL(SmartCRUDL):
 
 
             # and off we go
-            self.object_list = self.get_queryset()
+            self.object_list = self.derive_queryset()
             context = self.get_context_data(object_list=self.object_list)
 
             return self.render_to_response(context)
@@ -120,6 +131,9 @@ class MessageCRUDL(SmartCRUDL):
             # break it up by date counts
             context['incoming_counts'] = self.build_daily_counts(objects, direction='I', date__gte=one_month)
             context['outgoing_counts'] = self.build_daily_counts(objects, direction='O', date__gte=one_month)
+
+            context['backends'] = Backend.objects.all()
+            context['backend_id'] = int(self.request.REQUEST.get('backend_id', 0))
 
             if self.request.method == 'POST':
                 context['form'] = MessageTesterForm(self.request.POST)
