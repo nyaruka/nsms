@@ -11,7 +11,7 @@ class MessageTesterForm(forms.Form):
     text = forms.CharField(max_length=160, label="Message", widget=forms.TextInput(attrs={'size':'60'}))
 
 class MessageCRUDL(SmartCRUDL):
-    actions = ('list', 'csv', 'monthly')
+    actions = ('list', 'csv', 'monthly', 'status')
     model = Message
     permissions = True
 
