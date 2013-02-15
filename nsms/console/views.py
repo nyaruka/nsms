@@ -28,6 +28,19 @@ class MessageCRUDL(SmartCRUDL):
             # return our queryset
             return queryset.select_related(depth=1)
 
+    class Status(SmartListView):
+        permission = None
+
+        def get_context_data(self, *args, **kwargs):
+            context = super(MessageCRUDL.Status, self).get_context_data(*args, **kwargs)
+
+            # get all messages that are unset for more than 30 seconds
+            thirty_seconds_ago = datetime.datetime.now() - datetime.timedelta(seconds=30)
+            context['unsent'] = Message.objects.filter(date__lte=thirty_seconds_ago, status='Q').count()
+            context['error'] = Message.objects.filter(date__lte=thirty_seconds_ago, status='E').count()
+
+            return context
+
     class Monthly(SmartListView):
         title = "Monthly Message Volume"
 
@@ -104,12 +117,8 @@ class MessageCRUDL(SmartCRUDL):
                                                        form.cleaned_data['sender'],
                                                        form.cleaned_data['text'])                
 
-
             # and off we go
-            self.object_list = self.derive_queryset()
-            context = self.get_context_data(object_list=self.object_list)
-
-            return self.render_to_response(context)
+            return self.get(*args, **kwargs)
 
         def build_daily_counts(self, objects, **filters):
             counts = objects.filter(**filters).order_by('date').extra({'created':"date(date)"}).values('created').annotate(created_on_count=Count('id'))

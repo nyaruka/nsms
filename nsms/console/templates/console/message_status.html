@@ -1,0 +1,18 @@
+<html>
+<head>
+    <title>SMS Status</title>
+</head>
+
+<body>
+  <pre>
+{% if unsent > 0 %}
+ERROR
+{% else %}
+OK
+{% endif %}
+Unsent: {{ unsent }}
+Errors: {{ error }}
+  </pre>
+</body>
+
+</html>
