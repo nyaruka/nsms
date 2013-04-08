@@ -35,15 +35,15 @@
         <a class="brand" href="/">NyarukaSMS</a>
         <ul class="nav">
           {% if perms.mileage.car_list %}
-          <li><a href="{% url mileage.car_list %}">Cars</a></li>
+          <li><a href="{% url 'mileage.car_list' %}">Cars</a></li>
           {% endif %}
 
           {% if perms.mileage.mileagereport_list %}
-          <li><a href="{% url mileage.mileagereport_list %}">Mileage Reports</a></li>
+          <li><a href="{% url 'mileage.mileagereport_list' %}">Mileage Reports</a></li>
           {% endif %}
 
           {% if perms.message.message_list %}
-          <li><a href="{% url console.message_list %}">Console</a></li>
+          <li><a href="{% url 'console.message_list' %}">Console</a></li>
           {% endif %}
 
           {% if perms.nsms.text_list %}
@@ -61,9 +61,9 @@
         <ul class="nav pull-right">
           {% block login %}
           {% if request.user and request.user.is_authenticated %}
-          <li class="pull-right"><a href="{% url users.user_logout %}?go=/">{{ request.user.username }} | logout</a></li>
+          <li class="pull-right"><a href="{% url 'users.user_logout' %}?go=/">{{ request.user.username }} | logout</a></li>
           {% else %}
-          <li class="pull-right"><a href="{% url users.user_login %}">Login</a></li>
+          <li class="pull-right"><a href="{% url 'users.user_login' %}">Login</a></li>
           {% endif %}
           {% endblock %}
         </ul>
