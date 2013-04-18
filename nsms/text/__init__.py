@@ -13,7 +13,7 @@ class LazyText(object):
         return unicode(self).__mod__(b)
 
     def __eq__(self, b):
-        return unicode(self) == b
+        return unicode(self).__eq__(b)
 
     def __str__(self):
         return str(unicode(self))
@@ -24,7 +24,7 @@ class LazyText(object):
         text = self.text.text
 
         if self.variables is None:
-            return text
+            return unicode(text)
         else:
             try:
                 # our text is a template, perform substitutions on it
