@@ -14,10 +14,10 @@ class App(AppBase):
     """
     This app is responsible for setting and changing a user's preferred language.
 
-    In order for this app to do it's magic, you need to define what your SMS profile in 
+    In order for this app to do it's magic, you need to define what your SMS profile in
     your settings_common.py:
 
-           SMS_PROFILE = 'chws.chw'
+           SMS_PROFILE = 'rapidsms.models.Contact'
 
     The language app will respond to messages that begin with the keyword 'lang'.  Without
     an argument it will respond with the currently selected language, with an argument it
@@ -26,7 +26,36 @@ class App(AppBase):
            lang en[_us]
            lang rw
     """
+
+    @classmethod
+    def get_language_display(cls, lang):
+        """
+        Uses our LANGUAGES setting in our config to return a nicer version of
+        the language for users.
+        """
+        langs = getattr(settings, 'LANGUAGES', ())
+        for (code, display) in langs:
+            if code.lower() == lang.lower():
+                return display
+
+        return lang
+
+
+    def cleanup(self, msg):
+        """
+        We reset things to the default language for the system so the web interface
+        doesn't end in the SMS language.
+        """
+        translation.activate(getattr(settings, 'DEFAULT_LANGUAGE', 'en_us'))
+
+
     def handle (self, message):
+        """
+        Tries to look up a profile for the user and set the default language.
+
+        Also takes care of handing the 'lang' keyword
+        """
+
         profile = get_sms_profile(message.connection)
 
         # handle activating the appropriate SMS language
@@ -51,7 +80,8 @@ class App(AppBase):
             # just querying the language
             language = parser.next_word()
             if not language:
-                message.respond(_('lang-current-lang', "Your language is set to {{ language }}.", dict(language=profile.get_language_display())))
+                message.respond(_('lang-current-lang', "Your language is set to {{ language }}.",
+                                  dict(language=App.get_language_dipslay(profile.language))))
                 return True
 
             else:
@@ -69,7 +99,8 @@ class App(AppBase):
 
                 # this language doesn't exit
                 if not language.lower() in lang_mapping:
-                    message.respond(_('lang-unknown-language', "Sorry, the language code '{{ code }}' is not supported.", dict(code=language.lower())))
+                    message.respond(_('lang-unknown-language', "Sorry, the language code '{{ code }}' is not supported.",
+                                      dict(code=language.lower())))
                     return True
 
                 profile.language = lang_mapping[language.lower()]
@@ -77,7 +108,8 @@ class App(AppBase):
                 
                 # activate the new language
                 translation.activate(profile.language)
-                message.respond(_('lang-set-success', "Success, your language is now set to {{ language }}.", dict(language=profile.get_language_display())))
+                message.respond(_('lang-set-success', "Success, your language is now set to {{ language }}.",
+                                  dict(language=App.get_language_display(profile.language))))
 
                 return True
 

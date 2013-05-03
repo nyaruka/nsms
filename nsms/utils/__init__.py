@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User, Group
 from django.conf import settings
+from rapidsms.models import Contact
 import sys
 
 def import_from_string(kls):
@@ -25,13 +26,22 @@ def get_sms_profile(connection):
 
     profile_class = import_from_string(profile_class_name)
 
-    # see if we can find a match for that connection
-    matches = profile_class.objects.filter(connection=connection)
-    if matches:
-        return matches[0]
+    # we special case the RapidSMS Contact case, creating them lazily as needed
+    if profile_class == Contact:
+        if not connection.contact:
+            connection.contact = Contact.objects.create(language=getattr(settings, 'DEFAULT_SMS_LANGUAGE', 'en_us'))
+            connection.save()
+
+        return connection.contact
 
     else:
-        return None
+        # see if we can find a match for that connection
+        matches = profile_class.objects.filter(connection=connection)
+        if matches:
+            return matches[0]
+        else:
+            return None
+
 
 def get_connection_user(connection):
     """
