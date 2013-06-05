@@ -12,4 +12,4 @@ coverage
 coverage-report
 media
 smartmin
-
+*.egg*/
