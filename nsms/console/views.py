@@ -7,6 +7,7 @@ from django.db.models import Count
 import datetime
 
 class MessageTesterForm(forms.Form):
+    backend = forms.CharField(max_length=20, initial='tester')
     sender = forms.CharField(max_length=20, initial="12065551212")
     text = forms.CharField(max_length=160, label="Message", widget=forms.TextInput(attrs={'size':'60'}))
 
@@ -102,7 +103,6 @@ class MessageCRUDL(SmartCRUDL):
         def derive_queryset(self, *args, **kwargs):
             queryset = super(MessageCRUDL.List, self).derive_queryset(*args, **kwargs)
 
-            # filter by backend id if there is one in our request
             backend_id = int(self.request.REQUEST.get('backend_id', 0))
             if backend_id:
                 queryset = queryset.filter(connection__backend=backend_id)
@@ -113,11 +113,13 @@ class MessageCRUDL(SmartCRUDL):
             # valid form, then process the message
             form = MessageTesterForm(self.request.POST)
             if form.is_valid():
-                message = get_router().handle_incoming('console',
+                message = get_router().handle_incoming(form.cleaned_data.get('backend', 'tester'),
                                                        form.cleaned_data['sender'],
                                                        form.cleaned_data['text'])                
 
-            # and off we go
+                # and off we go
+                return HttpResponseRedirect(reverse('console.message_list') + "?backend_id=%d" % message.connection.backend.id)
+
             return self.get(*args, **kwargs)
 
         def build_daily_counts(self, objects, **filters):
@@ -142,7 +144,20 @@ class MessageCRUDL(SmartCRUDL):
             context['outgoing_counts'] = self.build_daily_counts(objects, direction='O', date__gte=one_month)
 
             context['backends'] = Backend.objects.all()
+
             context['backend_id'] = int(self.request.REQUEST.get('backend_id', 0))
+
+            tester_backend = 'tester'
+            backend_id = int(self.request.REQUEST.get('backend_id', 0))
+            if backend_id:
+                backend = Backend.objects.get(id=backend_id)
+                if backend.name.find('tester') < 0:
+                    tester_backend = "%s_tester" % backend.name
+                else:
+                    tester_backend = backend.name
+
+            context['backend_id'] = int(self.request.REQUEST.get('backend_id', 0))
+            context['tester_backend'] = tester_backend
 
             if self.request.method == 'POST':
                 context['form'] = MessageTesterForm(self.request.POST)
@@ -155,17 +170,19 @@ class MessageCRUDL(SmartCRUDL):
             return obj.connection.identity
 
         def get_direction(self, obj):
+            is_test = obj.connection.backend.name.find('tester') >= 0 or obj.connection.backend.name == 'console'
+
             if obj.direction == 'I':
-                if obj.connection.backend.name == 'console':
+                if is_test:
                     style = 'cin'
                 else:
                     style = 'in'
             else:
-                if obj.connection.backend.name == 'console':
+                if is_test:
                     style = 'cout'
                 elif obj.status == 'D':
                     style = 'delivered'
-                elif obj.status == 'S' or obj.connection.backend.name == 'console':
+                elif obj.status == 'S' or is_test:
                     style = 'sent'
                 else:
                     style = 'queued'

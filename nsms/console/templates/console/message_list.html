@@ -2,7 +2,7 @@
 
 {% block table-buttons %}
 {% if perms.rapidsms_httprouter.message_csv %}
-<a class="btn pull-right" href="{% url console.message_csv %}">Export</a>
+<a class="btn pull-right" href="{% url 'console.message_csv' %}">Export</a>
 {% endif %}
 {% endblock table-buttons %}
 
