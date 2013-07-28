@@ -80,6 +80,11 @@ class Parser(object):
     def next_hour(self, error_msg=None):
         hour = self.next_word(error_msg)
 
+        # considering the context of a feature phone it is easy to confuse
+        # 'l' to 1 and 'o' to 0, lets handle this situation
+        if hour:
+            hour = hour.replace('l', '1').replace('o', '0').replace('O', '0')
+
         # four digits means this is hour and minute (1312 for 13), we care only about hour
         if len(hour) == 4:
             hour = hour[:2]
@@ -103,6 +108,11 @@ class Parser(object):
         if phone and phone[0] == '+':
             phone = phone[1:]
 
+        # we expect the phone to be number only at this time,
+        # with the situation where 'l' or 'o' are confused to be number
+        if phone:
+            phone = phone.replace('l', '1').replace('o', '0').replace('O', '0')
+
         # make sure it is numeric (an integer)
         try:
             int(phone)
@@ -120,7 +130,11 @@ class Parser(object):
 
     def next_int(self, error_msg=None):
         integer = self.next_word(error_msg)
-        
+
+        # we will torelate the situation where the value 0 or 1 are confused to 'l or o' characters
+        if integer:
+            integer = integer.replace('l', '1').replace('o', '0').replace('O', '0')
+
         # make sure it is numeric (an integer)
         try:
             int(integer)
@@ -142,6 +156,7 @@ class Parser(object):
             date = None
         else:
             try:
+                # now that we expect day month and year to be integer values there is a probability
                 day = int(match.group(1))
                 month = int(match.group(2))
                 year = int(match.group(3))

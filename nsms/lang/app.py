@@ -81,7 +81,7 @@ class App(AppBase):
             language = parser.next_word()
             if not language:
                 message.respond(_('lang-current-lang', "Your language is set to {{ language }}.",
-                                  dict(language=App.get_language_dipslay(profile.language))))
+                                  dict(language=App.get_language_display(profile.language))))
                 return True
 
             else:

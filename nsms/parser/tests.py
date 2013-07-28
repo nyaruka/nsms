@@ -98,6 +98,22 @@ class ParserTest(TestCase):
         self.assertNextKeyword(None, ",", KEYWORDS, ',', ' ', '.')
         self.assertNextKeyword(None, ".", KEYWORDS, '.', ' ', '.')
 
+    def assertNextHour(self, truth, sms, *args):
+        parser = Parser(sms, *args)
+        self.assertEquals(truth, parser.next_hour())
+
+    def test_hour_parsing(self):
+        self.assertNextHour(12, " 1245 CET")
+        self.assertNextHour(12, " 1245, CET", ',')
+        self.assertNextHour(12, " 1245. CET", '.')
+
+        # for anything number "l" should be treated like 1
+        self.assertNextHour(12, " l245")
+
+        # change "o" or "O" to be 0 as we expect only numbers
+        self.assertNextHour(20, " 2o45")
+        self.assertNextHour(20, " 2O45")
+
     def assertNextPhone(self, truth, sms, *args):
         parser = Parser(sms, *args)
         self.assertEquals(truth, parser.next_phone())
@@ -127,6 +143,13 @@ class ParserTest(TestCase):
         self.assertNextPhone("250788383388", " +250788383388", '.', ' ', ',')
         self.assertNextPhone("250788383388", " +250788383388", '.', ' ', ',')
 
+        # for anything number "l" should be treated like 1
+        self.assertNextPhone("250788183388", " 250788l83388")
+
+        # change "o" or "O" to be 0 as we expect only numbers
+        self.assertNextPhone("250788310338", " 2507883lo338")
+        self.assertNextPhone("250788310338", " 2507883l0338")
+
         # nothing there
         self.assertNextPhone(None, " ")
         self.assertNextPhone(None, " ", ',')
@@ -149,6 +172,20 @@ class ParserTest(TestCase):
         self.assertNextPhone(None, "07883833881", '.', ' ', ',')
         self.assertNextPhone(None, "07883833881", '.', ' ', ',')
         self.assertNextPhone(None, "07883833881", '.', ' ', ',')
+
+    def assertNextInt(self, truth_int, sms, *args):
+        parser = Parser(sms, *args)
+        self.assertEquals(truth_int, parser.next_int())
+
+    def test_int_parsing(self):
+        self.assertNextInt('120', "  120 Homeless children")
+        self.assertNextInt('120', "  120, Homeless children", ',')
+        self.assertNextInt('120', "  120. Homeless children", '.')
+
+        # resolve confused characters to number 'l', 'O' or 'o'
+        self.assertNextInt('120', "  l20 Homeless children")
+        self.assertNextInt('120', "  l2o Homeless children")
+        self.assertNextInt('120', "  l2O Homeless children")
 
     def assertNextDate(self, truth_day, truth_month, truth_year, sms):
         parser = Parser(sms)
